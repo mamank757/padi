@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Tanam Padi PRO v2.1</title>
+
+<style>
+:root {
+  --primary: #1b5e20;
+  --secondary: #4caf50;
+  --light: #f1f8e9;
+  --orange: #ef6c00;
+  --blue: #1565c0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #eef2f3;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  max-width: 500px;
+  width: 100%;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+h2 { text-align: center; color: var(--primary); margin-bottom: 20px;}
+label { font-weight: bold; font-size: 0.9rem; color: #444; display: block; margin-top: 15px;}
+input, select, button { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box;}
+button { background: var(--primary); color: white; border: none; font-size: 1rem; cursor: pointer; margin-top: 20px; transition: 0.3s;}
+button:hover { background: var(--secondary); }
+
+.result { margin-top: 25px; display: none; border-top: 2px solid #eee; padding-top: 15px;}
+.card { background: var(--light); padding: 15px; border-left: 5px solid var(--primary); margin-bottom: 12px; border-radius: 6px; position: relative;}
+.card b { color: var(--primary); display: block; margin-bottom: 5px;}
+.panen { background: #fff3e0; border-left-color: var(--orange); }
+.panen b { color: var(--orange); }
+.info-pupuk { font-size: 0.85rem; color: #555; margin-top: 5px; font-style: italic; }
+.hst-badge { position: absolute; right: 10px; top: 10px; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>🌾 Kalkulator Padi</h2>
+
+  <label>📅 Tanggal Tanam (Pindah Tanam):</label>
+  <input type="date" id="tgl">
+
+  <label>🌾 Varietas (Berdasarkan Umur):</label>
+  <select id="varietas">
+    <option value="77">Ultra Genjah (70-84 HST)</option>
+    <option value="88">Sangat Genjah (85-90 HST)</option>
+    <option value="100" selected>Genjah (91-105 HST)</option>
+    <option value="112">Sedang (106-115 HST)</option>
+    <option value="120">Dalam (116-125 HST)</option>
+  </select>
+
+  <label>📐 Luas Lahan (Hektar):</label>
+  <input type="number" id="luas" step="0.1" value="1">
+
+  <button onclick="hitung()">📊 ANALISIS JADWAL</button>
+
+  <div class="result" id="hasil"></div>
+</div>
+
+<script>
+function tglFormat(t) {
+  return new Date(t).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+}
+
+function tambahHari(tanggal, hari) {
+  let d = new Date(tanggal);
+  d.setDate(d.getDate() + hari);
+  return d;
+}
+
+function hitung() {
+  let tglVal = document.getElementById("tgl").value;
+  let umur = parseInt(document.getElementById("varietas").value);
+  let luas = parseFloat(document.getElementById("luas").value) || 0;
+
+  if (!tglVal) { alert("Tentukan tanggal tanam!"); return; }
+
+  let tanam = new Date(tglVal);
+  let hariIni = new Date();
+  let umurSekarang = Math.floor((hariIni - tanam)/(1000*60*60*24));
+
+  // --- LOGIKA ILMIAH FASE & PUPUK ---
+  
+  // 1. Pupuk Dasar/Awal (0-10 HST) - Kita ambil rata-rata 7 HST
+  let p1_hst = 7;
+  // 2. Pupuk Susulan I (21-28 HST) - Saat anakan aktif
+  let p2_hst = 25;
+  // 3. Pupuk Susulan II / Primordia (Umur Panen - 55 s/d 60 hari)
+  // Referensi: Inisiasi malai dimulai sekitar 60 hari sebelum masak fisiologis
+  let p3_hst = umur - 55; 
+
+  // Koreksi jika tanaman ultra genjah (biar tidak tumpang tindih)
+  if(p3_hst <= p2_hst) p3_hst = p2_hst + 15;
+
+  let p1 = tambahHari(tanam, p1_hst);
+  let p2 = tambahHari(tanam, p2_hst);
+  let p3 = tambahHari(tanam, p3_hst);
+  let panen = tambahHari(tanam, umur);
+
+  // Estimasi Hasil (Rata-rata nasional 6 ton/ha untuk varietas unggul)
+  let estimasi = (luas * 6).toFixed(1);
+
+  document.getElementById("hasil").style.display = "block";
+  document.getElementById("hasil").innerHTML = `
+    
+    <div class="card" style="border-left-color: var(--blue)">
+      <b>📊 Status Tanaman Saat Ini</b>
+      Umur: ${umurSekarang} HST (${umurSekarang < 0 ? 'Belum Tanam' : 'Masa Pertumbuhan'})
+    </div>
+
+    <div class="card">
+      <span class="hst-badge">${p1_hst} HST</span>
+      <b>🧪 Pemupukan Tahap I</b>
+      Tanggal: ${tglFormat(p1)}
+      <div class="info-pupuk">Fokus: Pertumbuhan akar & jumlah anakan (Urea + NPK)</div>
+    </div>
+
+    <div class="card">
+      <span class="hst-badge">${p2_hst} HST</span>
+      <b>🧪 Pemupukan Tahap II</b>
+      Tanggal: ${tglFormat(p2)}
+      <div class="info-pupuk">Fokus: Maksimalisasi anakan aktif (Urea)</div>
+    </div>
+
+    <div class="card">
+      <span class="hst-badge">${p3_hst} HST</span>
+      <b>🧪 Pemupukan Tahap III (Primordia)</b>
+      Tanggal: ${tglFormat(p3)}
+      <div class="info-pupuk">Fokus: Pengisian bulir & kualitas malai (NPK / KCl)</div>
+    </div>
+
+    <div class="card panen">
+      <b>🌾 Estimasi Panen</b>
+      Tanggal: ${tglFormat(panen)}
+      <div class="info-pupuk">Masak fisiologis (90% gabah kuning)</div>
+    </div>
+
+    <div class="card panen">
+      <b>💰 Proyeksi Hasil Panen</b>
+      ± ${estimasi} Ton Gabah Kering Panen (GKP)
+      <div class="info-pupuk">Asumsi rata-rata 6 ton/ha</div>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
