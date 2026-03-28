@@ -3,59 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalkulator Tanam Padi PRO v2.1</title>
+<title>Kalkulator Tanam Padi PRO</title>
 
 <style>
 :root {
-  --primary: #1b5e20;
-  --secondary: #4caf50;
-  --light: #f1f8e9;
-  --orange: #ef6c00;
-  --blue: #1565c0;
+  --primary: #81c784; /* Hijau lebih terang agar kontras di background gelap */
+  --bg-dark: #121212;
+  --card-dark: #1e1e1e;
+  --input-bg: #2d2d2d;
+  --text-main: #e0e0e0;
+  --text-muted: #b0b0b0;
+  --orange: #ffb74d;
+  --blue: #64b5f6;
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #eef2f3;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
   display: flex;
   justify-content: center;
   padding: 20px;
+  margin: 0;
 }
 
 .container {
-  background: white;
+  background: var(--card-dark);
   max-width: 500px;
   width: 100%;
   padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-h2 { text-align: center; color: var(--primary); margin-bottom: 20px;}
-label { font-weight: bold; font-size: 0.9rem; color: #444; display: block; margin-top: 15px;}
-input, select, button { width: 100%; padding: 12px; margin-top: 5px; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box;}
-button { background: var(--primary); color: white; border: none; font-size: 1rem; cursor: pointer; margin-top: 20px; transition: 0.3s;}
-button:hover { background: var(--secondary); }
+h2 { 
+  text-align: center; 
+  color: var(--primary); 
+  margin-bottom: 25px;
+  font-weight: 700;
+}
 
-.result { margin-top: 25px; display: none; border-top: 2px solid #eee; padding-top: 15px;}
-.card { background: var(--light); padding: 15px; border-left: 5px solid var(--primary); margin-bottom: 12px; border-radius: 6px; position: relative;}
-.card b { color: var(--primary); display: block; margin-bottom: 5px;}
-.panen { background: #fff3e0; border-left-color: var(--orange); }
+label { 
+  font-weight: 600; 
+  font-size: 0.85rem; 
+  color: var(--text-muted); 
+  display: block; 
+  margin-top: 15px;
+  margin-left: 5px;
+}
+
+input, select, button { 
+  width: 100%; 
+  padding: 14px; 
+  margin-top: 8px; 
+  border-radius: 12px; 
+  border: 1px solid #444; 
+  background: var(--input-bg);
+  color: white;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+button { 
+  background: var(--primary); 
+  color: #121212; 
+  border: none; 
+  font-weight: bold; 
+  cursor: pointer; 
+  margin-top: 25px; 
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button:hover { 
+  background: #a5d6a7; 
+  transform: translateY(-2px);
+}
+
+.result { 
+  margin-top: 30px; 
+  display: none; 
+  border-top: 1px solid #333; 
+  padding-top: 20px;
+}
+
+.card { 
+  background: #252525; 
+  padding: 18px; 
+  border-left: 4px solid var(--primary); 
+  margin-bottom: 15px; 
+  border-radius: 10px; 
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.card:hover { transform: scale(1.02); }
+
+.card b { color: var(--primary); display: block; margin-bottom: 6px; font-size: 0.95rem; }
+
+.panen { border-left-color: var(--orange); background: #2d261e; }
 .panen b { color: var(--orange); }
-.info-pupuk { font-size: 0.85rem; color: #555; margin-top: 5px; font-style: italic; }
-.hst-badge { position: absolute; right: 10px; top: 10px; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; }
+
+.info-pupuk { font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; line-height: 1.4; }
+
+.hst-badge { 
+  position: absolute; 
+  right: 12px; 
+  top: 12px; 
+  background: #333; 
+  color: var(--primary); 
+  padding: 3px 10px; 
+  border-radius: 8px; 
+  font-size: 0.75rem; 
+  font-weight: bold;
+  border: 1px solid var(--primary);
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-  <h2>🌾 Kalkulator Padi</h2>
+  <h2>🌾 KALKULATOR PADI</h2>
 
-  <label>📅 Tanggal Tanam (Pindah Tanam):</label>
+  <label>📅 TANGGAL TANAM</label>
   <input type="date" id="tgl">
 
-  <label>🌾 Varietas (Berdasarkan Umur):</label>
+  <label>🌾 VARIETAS PADI</label>
   <select id="varietas">
     <option value="77">Ultra Genjah (70-84 HST)</option>
     <option value="88">Sangat Genjah (85-90 HST)</option>
@@ -64,10 +144,10 @@ button:hover { background: var(--secondary); }
     <option value="120">Dalam (116-125 HST)</option>
   </select>
 
-  <label>📐 Luas Lahan (Hektar):</label>
+  <label>📐 LUAS LAHAN (HEKTAR)</label>
   <input type="number" id="luas" step="0.1" value="1">
 
-  <button onclick="hitung()">📊 ANALISIS JADWAL</button>
+  <button onclick="hitung()">🔍 ANALISIS SEKARANG</button>
 
   <div class="result" id="hasil"></div>
 </div>
@@ -84,76 +164,65 @@ function tambahHari(tanggal, hari) {
 }
 
 function hitung() {
-  let tglVal = document.getElementById("tgl").value;
-  let umur = parseInt(document.getElementById("varietas").value);
-  let luas = parseFloat(document.getElementById("luas").value) || 0;
+  const tglVal = document.getElementById("tgl").value;
+  const umur = parseInt(document.getElementById("varietas").value);
+  const luas = parseFloat(document.getElementById("luas").value) || 0;
 
-  if (!tglVal) { alert("Tentukan tanggal tanam!"); return; }
+  if (!tglVal) { alert("Pilih tanggal tanam!"); return; }
 
-  let tanam = new Date(tglVal);
-  let hariIni = new Date();
-  let umurSekarang = Math.floor((hariIni - tanam)/(1000*60*60*24));
+  const tanam = new Date(tglVal);
+  const hariIni = new Date();
+  const umurSekarang = Math.floor((hariIni - tanam)/(1000*60*60*24));
 
-  // --- LOGIKA ILMIAH FASE & PUPUK ---
-  
-  // 1. Pupuk Dasar/Awal (0-10 HST) - Kita ambil rata-rata 7 HST
-  let p1_hst = 7;
-  // 2. Pupuk Susulan I (21-28 HST) - Saat anakan aktif
-  let p2_hst = 25;
-  // 3. Pupuk Susulan II / Primordia (Umur Panen - 55 s/d 60 hari)
-  // Referensi: Inisiasi malai dimulai sekitar 60 hari sebelum masak fisiologis
+  const p1_hst = 7;
+  const p2_hst = 25;
   let p3_hst = umur - 55; 
-
-  // Koreksi jika tanaman ultra genjah (biar tidak tumpang tindih)
   if(p3_hst <= p2_hst) p3_hst = p2_hst + 15;
 
-  let p1 = tambahHari(tanam, p1_hst);
-  let p2 = tambahHari(tanam, p2_hst);
-  let p3 = tambahHari(tanam, p3_hst);
-  let panen = tambahHari(tanam, umur);
-
-  // Estimasi Hasil (Rata-rata nasional 6 ton/ha untuk varietas unggul)
-  let estimasi = (luas * 6).toFixed(1);
+  const p1 = tambahHari(tanam, p1_hst);
+  const p2 = tambahHari(tanam, p2_hst);
+  const p3 = tambahHari(tanam, p3_hst);
+  const panen = tambahHari(tanam, umur);
+  const estimasi = (luas * 6).toFixed(1);
 
   document.getElementById("hasil").style.display = "block";
   document.getElementById("hasil").innerHTML = `
-    
     <div class="card" style="border-left-color: var(--blue)">
-      <b>📊 Status Tanaman Saat Ini</b>
-      Umur: ${umurSekarang} HST (${umurSekarang < 0 ? 'Belum Tanam' : 'Masa Pertumbuhan'})
+      <b>📊 STATUS TANAMAN</b>
+      Hari Ini: ${umurSekarang < 0 ? 'Belum Tanam' : umurSekarang + ' Hari Setelah Tanam'}
     </div>
 
     <div class="card">
       <span class="hst-badge">${p1_hst} HST</span>
-      <b>🧪 Pemupukan Tahap I</b>
-      Tanggal: ${tglFormat(p1)}
-      <div class="info-pupuk">Fokus: Pertumbuhan akar & jumlah anakan (Urea + NPK)</div>
+      <b>🧪 PUPUK TAHAP I (AWAL)</b>
+      📅 ${tglFormat(p1)}
+      <div class="info-pupuk">Gunakan campuran Urea & NPK untuk memacu pertumbuhan vegetatif awal.</div>
     </div>
 
     <div class="card">
       <span class="hst-badge">${p2_hst} HST</span>
-      <b>🧪 Pemupukan Tahap II</b>
-      Tanggal: ${tglFormat(p2)}
-      <div class="info-pupuk">Fokus: Maksimalisasi anakan aktif (Urea)</div>
+      <b>🧪 PUPUK TAHAP II (ANAKAN)</b>
+      📅 ${tglFormat(p2)}
+      <div class="info-pupuk">Fokus pada Urea untuk memaksimalkan jumlah anakan produktif.</div>
     </div>
 
     <div class="card">
       <span class="hst-badge">${p3_hst} HST</span>
-      <b>🧪 Pemupukan Tahap III (Primordia)</b>
-      Tanggal: ${tglFormat(p3)}
-      <div class="info-pupuk">Fokus: Pengisian bulir & kualitas malai (NPK / KCl)</div>
+      <b>🧪 PUPUK TAHAP III (BUNTING)</b>
+      📅 ${tglFormat(p3)}
+      <div class="info-pupuk">Fase Primordia. Tambahkan NPK/KCl untuk kualitas malai dan pengisian bulir.</div>
     </div>
 
     <div class="card panen">
-      <b>🌾 Estimasi Panen</b>
-      Tanggal: ${tglFormat(panen)}
-      <div class="info-pupuk">Masak fisiologis (90% gabah kuning)</div>
+      <b>🌾 PREDIKSI PANEN</b>
+      📅 ${tglFormat(panen)}
+      <div class="info-pupuk">Estimasi waktu masak fisiologis. Siapkan tenaga kerja dan peralatan panen.</div>
     </div>
 
     <div class="card panen">
-      <b>💰 Proyeksi Hasil Panen</b>
-      ± ${estimasi} Ton Gabah Kering Panen (GKP)
-      <div class="info-pupuk">Asumsi rata-rata 6 ton/ha</div>
+      <b>💰 PROYEKSI HASIL GKP</b>
+      ± ${estimasi} Ton Gabah
+      <div class="info-pupuk">Berdasarkan luas lahan ${luas} ha dengan potensi rata-rata unggul.</div>
     </div>
   `;
 }
