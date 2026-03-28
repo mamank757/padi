@@ -7,7 +7,7 @@
 
 <style>
 :root {
-  --primary: #81c784; /* Hijau lebih terang agar kontras di background gelap */
+  --primary: #81c784; 
   --bg-dark: #121212;
   --card-dark: #1e1e1e;
   --input-bg: #2d2d2d;
@@ -25,6 +25,33 @@ body {
   justify-content: center;
   padding: 20px;
   margin: 0;
+}
+
+/* TOMBOL HOME MELAYANG */
+.btn-home {
+  position: fixed;
+  bottom: 25px;
+  right: 20px;
+  background: var(--primary);
+  color: #121212;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-size: 26px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  z-index: 9999;
+  transition: all 0.3s ease;
+  border: 2px solid white;
+}
+
+.btn-home:hover {
+  transform: scale(1.1);
+  background: white;
+  color: var(--primary);
 }
 
 .container {
@@ -128,6 +155,8 @@ button:hover {
 </head>
 
 <body>
+
+<a href="https://mamank757.github.io/PPL" class="btn-home" title="Kembali ke Dashboard Utama">🏠</a>
 
 <div class="container">
   <h2>🌾 KALKULATOR PADI</h2>
